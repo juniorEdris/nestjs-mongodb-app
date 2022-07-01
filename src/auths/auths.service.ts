@@ -1,5 +1,5 @@
 import { UserService } from './../user/user.service';
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable, HttpStatus } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { UserInterface } from 'src/user/interface/User.interface';
 import { UserDTO } from './dto/auth.dto';
@@ -23,7 +23,11 @@ export class AuthsService {
 
     const existingUser = await this.userService.findByEmail(email);
 
-    if (existingUser) return 'Email taken! Please try another email.';
+    if (existingUser)
+      throw new HttpException(
+        'Email taken! Please try another email.',
+        HttpStatus.CONFLICT,
+      );
 
     const hashedPassword = await this.hashPassword(password);
 
@@ -64,9 +68,20 @@ export class AuthsService {
     const { email, password } = existingUser;
     const user = await this.validateUser(email, password);
 
-    if (!user) return null;
+    if (!user) {
+      throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+    }
 
     const jwt = await this.jwtService.signAsync({ user });
     return { token: jwt };
+  }
+
+  async verifyJwt(jwt: string): Promise<{ exp: number }> {
+    try {
+      const { exp } = await this.jwtService.verifyAsync(jwt);
+      return { exp };
+    } catch (error) {
+      throw new HttpException('Invalid JWT', HttpStatus.UNAUTHORIZED);
+    }
   }
 }
