@@ -11,11 +11,18 @@ export class AuthsController {
   register(@Body() createUserDto: UserDTO): Promise<UserInterface | null> {
     return this.authsService.register(createUserDto);
   }
+
   @Post('login')
   @HttpCode(HttpStatus.OK)
   login(
     @Body() createUserDto: ExistingUserDTO,
   ): Promise<{ token: string } | null> {
     return this.authsService.login(createUserDto);
+  }
+
+  @Post('verify-jwt')
+  @HttpCode(HttpStatus.OK)
+  verifyJwt(@Body() payload: { jwt: string }) {
+    return this.authsService.verifyJwt(payload.jwt);
   }
 }
