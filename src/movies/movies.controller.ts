@@ -1,24 +1,17 @@
 import { JwtGuard } from './../guards/jwt.guards';
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
-import { UpdateMovieDto } from './dto/update-movie.dto';
 
 @Controller('movies')
 export class MoviesController {
   constructor(private readonly moviesService: MoviesService) {}
 
-  @Post('create-movie')
+  @Post('add-movie')
+  @UseGuards(JwtGuard)
   create(@Body() createMovieDto: CreateMovieDto) {
+    console.log(createMovieDto);
+
     return this.moviesService.create(createMovieDto);
   }
 
@@ -26,20 +19,5 @@ export class MoviesController {
   @UseGuards(JwtGuard)
   findAll() {
     return this.moviesService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.moviesService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMovieDto: UpdateMovieDto) {
-    return this.moviesService.update(+id, updateMovieDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.moviesService.remove(+id);
   }
 }
