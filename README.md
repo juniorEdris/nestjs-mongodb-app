@@ -1,4 +1,4 @@
-# Frontend.Typescript.Movielist.App
+# Backend.Nestjs.Mongodb.Movielist.App
 
 
 # React.js + Nestjs App
