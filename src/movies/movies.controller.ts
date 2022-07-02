@@ -10,8 +10,6 @@ export class MoviesController {
   @Post('add-movie')
   @UseGuards(JwtGuard)
   create(@Body() createMovieDto: CreateMovieDto) {
-    console.log(createMovieDto);
-
     return this.moviesService.create(createMovieDto);
   }
 
