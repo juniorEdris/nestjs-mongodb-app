@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { MovieDocument, Movie } from 'src/schemas/Movie.schema';
-import { CreateMovieDto } from './dto/create-movie.dto';
+import { CreateMovieDto, QueryDTO } from './dto/create-movie.dto';
 
 @Injectable()
 export class MoviesService {
@@ -15,5 +15,10 @@ export class MoviesService {
 
   findAll() {
     return this.MovieModel.find();
+  }
+
+  findByName(query: QueryDTO) {
+    const name = { name: query.query };
+    return this.MovieModel.find(name);
   }
 }

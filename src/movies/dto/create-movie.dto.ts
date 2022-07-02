@@ -13,3 +13,7 @@ export class CreateMovieDto {
   @IsNotEmpty()
   public release_year: number;
 }
+export class QueryDTO {
+  @IsString()
+  public query: string;
+}

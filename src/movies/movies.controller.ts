@@ -1,7 +1,7 @@
 import { JwtGuard } from './../guards/jwt.guards';
 import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common';
 import { MoviesService } from './movies.service';
-import { CreateMovieDto } from './dto/create-movie.dto';
+import { CreateMovieDto, QueryDTO } from './dto/create-movie.dto';
 
 @Controller('movies')
 export class MoviesController {
@@ -19,5 +19,11 @@ export class MoviesController {
   @UseGuards(JwtGuard)
   findAll() {
     return this.moviesService.findAll();
+  }
+
+  @Post('search')
+  @UseGuards(JwtGuard)
+  findByName(@Body() query: QueryDTO) {
+    return this.moviesService.findByName(query);
   }
 }
