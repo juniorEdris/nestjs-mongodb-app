@@ -19,6 +19,6 @@ export class MoviesService {
 
   findByName(query: QueryDTO) {
     const name = { name: query.query };
-    return this.MovieModel.find(name);
+    return this.MovieModel.find({name: new RegExp(name, 'i')}); // Case Insensetive
   }
 }
